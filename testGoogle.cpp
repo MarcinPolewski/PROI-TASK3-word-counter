@@ -119,6 +119,28 @@ TEST(entry, inputStream_no_numer_as_count)
     ASSERT_THROW(input >> e, std::runtime_error);
 }
 
+TEST(entry, addAndSaveOperator)
+{
+    std::string s1 = "baba";
+    entry e1 = entry(s1, 1);
+    std::string s2 = "baba";
+    entry e2 = entry(s2, 2);
+
+    e1 += e2;
+    ASSERT_EQ((int)e1, 3);
+    ASSERT_EQ((int)e2, 2);
+}
+
+TEST(entry, addAndSaveOperator_other_values)
+{
+    std::string s1 = "baba";
+    entry e1 = entry(s1, 1);
+    std::string s2 = "gaga";
+    entry e2 = entry(s2, 2);
+
+    ASSERT_THROW(e1 += e2, std::invalid_argument);
+}
+
 TEST(findLastComma, test1)
 {
     std::string s = "[baba,1]";

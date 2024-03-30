@@ -15,6 +15,7 @@ public:
     entry operator++(int);                // post increment (for instance entry++)
     std::string const &operator*() const; // retreave value
     operator int() const;                 // retreave count
+    entry &operator+=(const entry &ent);
 
     std::string getString() const;
 };

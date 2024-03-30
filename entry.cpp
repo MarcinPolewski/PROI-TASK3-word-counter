@@ -50,6 +50,14 @@ int findLastComma(std::string s)
     return -1;
 }
 
+entry &entry::operator+=(const entry &ent)
+{
+    if (value != *ent)
+        throw std::invalid_argument("cannot add two entries of different words");
+    count += (int)ent;
+    return *this;
+}
+
 std::istream &operator>>(std::istream &stream, entry &ent)
 {
     std::string s;

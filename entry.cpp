@@ -14,6 +14,11 @@ entry entry::operator++(int)
     return *this;
 }
 
+bool entry::operator==(const entry &ent) const
+{
+    return (value == *ent && count == (int)ent);
+}
+
 std::string const &entry::operator*() const
 {
     return value;

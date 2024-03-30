@@ -16,6 +16,7 @@ public:
     std::string const &operator*() const; // retreave value
     operator int() const;                 // retreave count
     entry &operator+=(const entry &ent);
+    bool operator==(const entry &ent) const;
 
     std::string getString() const;
 };

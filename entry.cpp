@@ -1,6 +1,6 @@
 #include "entry.h"
 
-entry::entry(std::string value, int count)
+entry::entry(std::string &value, int count)
 {
     if (count < 1)
         throw std::invalid_argument("count cannot be of negative value");

@@ -10,7 +10,7 @@ class entry
 
 public:
     entry() = default;
-    entry(std::string value, int count = 1);
+    entry(std::string &value, int count = 1);
 
     entry operator++(int);                // post increment (for instance entry++)
     std::string const &operator*() const; // retreave value

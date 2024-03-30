@@ -54,7 +54,7 @@ TEST(entry, outputStream)
     ASSERT_EQ(ss.str(), expected.str());
 }
 
-TEST(entry, inputStream)
+TEST(entry, inputStream_1)
 {
     std::stringstream input;
     input << "[baba,5]";
@@ -63,6 +63,60 @@ TEST(entry, inputStream)
     input >> e;
     ASSERT_EQ((int)e, 5);
     ASSERT_EQ(*e, "baba");
+}
+
+TEST(entry, inputStream_invalid_structure_no_comma)
+{
+    std::stringstream input;
+    input << "[baba5]";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::runtime_error);
+}
+
+TEST(entry, inputStream_no_first_value)
+{
+    std::stringstream input;
+    input << "[,5]";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::runtime_error);
+}
+
+TEST(entry, inputStream_no_last_value)
+{
+    std::stringstream input;
+    input << "[baba,]";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::runtime_error);
+}
+
+TEST(entry, inputStream_no_bracket_1)
+{
+    std::stringstream input;
+    input << "baba5]";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::runtime_error);
+}
+
+TEST(entry, inputStream_no_bracket_2)
+{
+    std::stringstream input;
+    input << "[baba5";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::runtime_error);
+}
+
+TEST(entry, inputStream_no_numer_as_count)
+{
+    std::stringstream input;
+    input << "[baba,a]";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::runtime_error);
 }
 
 TEST(findLastComma, test1)

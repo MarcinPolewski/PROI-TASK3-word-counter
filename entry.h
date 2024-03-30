@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <stdexcept>
+#include <iostream>
 
 class entry
 {
@@ -8,12 +10,16 @@ class entry
 
 public:
     entry() = default;
-    entry(std::string value, int coun = 1) : value(value), count(count){};
+    entry(std::string value, int count = 1);
 
     entry operator++(int);                // post increment (for instance entry++)
     std::string const &operator*() const; // retreave value
-    operator int();                       // retreave count
+    operator int() const;                 // retreave count
+
+    std::string getString() const;
 };
 
+int findLastComma(std::string s);
+
 std::ostream &operator<<(std::ostream &stream, entry const &ent);
-std::ostream &operator>>(std::ostream &stream, entry const &ent);
+std::istream &operator>>(std::istream &stream, entry &ent);

@@ -19,6 +19,21 @@ bool entry::operator==(const entry &ent) const
     return (value == *ent && count == (int)ent);
 }
 
+bool entry::operator<(const entry &ent) const
+{
+    return count < (int)ent;
+}
+
+bool entry::operator>(const entry &ent) const
+{
+    return count > (int)ent;
+}
+
+bool entry::cmp_lexicographically(const entry &lEntry, const entry &rEntry) const
+{
+    return *lEntry > *rEntry;
+}
+
 std::string const &entry::operator*() const
 {
     return value;

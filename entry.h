@@ -17,6 +17,11 @@ public:
     operator int() const;                 // retreave count
     entry &operator+=(const entry &ent);
     bool operator==(const entry &ent) const;
+    bool operator>(const entry &ent) const; // compares count
+    bool operator<(const entry &ent) const;
+
+    // true if lEntry.value is greater
+    bool cmp_lexicographically(const entry &lEntry, const entry &rEntry) const;
 
     std::string getString() const;
 };

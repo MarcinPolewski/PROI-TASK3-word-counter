@@ -142,6 +142,39 @@ TEST(entry, addAndSaveOperator_other_values)
     ASSERT_THROW(e1 += e2, std::invalid_argument);
 }
 
+TEST(entry, greater_and_lesser_operator_1)
+{
+    std::string s1 = "aaa";
+    entry e1 = entry(s1, 1);
+    std::string s2 = "aaa";
+    entry e2 = entry(s2, 2);
+
+    ASSERT_TRUE(e1 < e2);
+    ASSERT_FALSE(e1 > e2);
+}
+
+TEST(entry, greater_and_lesser_operator_2)
+{
+    std::string s1 = "aaa";
+    entry e1 = entry(s1, 1);
+    std::string s2 = "bbb";
+    entry e2 = entry(s2, 2);
+
+    ASSERT_TRUE(e1 < e2);
+    ASSERT_FALSE(e1 > e2);
+}
+
+TEST(entry, greater_and_lesser_operator_3)
+{
+    std::string s1 = "aaa";
+    entry e1 = entry(s1, 2);
+    std::string s2 = "bbb";
+    entry e2 = entry(s2, 2);
+
+    ASSERT_FALSE(e1 < e2);
+    ASSERT_FALSE(e1 > e2);
+}
+
 TEST(findLastComma, test1)
 {
     std::string s = "[baba,1]";
@@ -183,11 +216,11 @@ TEST(word_counter, init_and_getter_2)
 
     std::vector<entry> arr = {e1, e2, e3};
 
-    word_counter wc(arr);
+    word_counter wc = word_counter(arr);
     ASSERT_EQ(wc.isEmpty(), false);
-    ASSERT_EQ(wc.getList()[0] == e3, true);
+    ASSERT_EQ(wc.getList()[0] == e1, true);
     ASSERT_EQ(wc.getList()[1] == e2, true);
-    ASSERT_EQ(wc.getList()[2] == e1, true);
+    ASSERT_EQ(wc.getList()[2] == e3, true);
 }
 
 TEST(word_counter, getIdx)
@@ -202,9 +235,9 @@ TEST(word_counter, getIdx)
     std::vector<entry> arr = {e1, e2, e3};
 
     word_counter wc(arr);
-    ASSERT_EQ(wc.getIdx(s3), 0);
+    ASSERT_EQ(wc.getIdx(s1), 0);
     ASSERT_EQ(wc.getIdx(s2), 1);
-    ASSERT_EQ(wc.getIdx(s1), 2);
+    ASSERT_EQ(wc.getIdx(s3), 2);
 
     std::string s4 = "ggg";
     ASSERT_EQ(wc.getIdx(s4), -1);
@@ -227,7 +260,7 @@ TEST(word_counter, getEntryReference)
     ASSERT_EQ(wc.getEntryReference(s1) == e1, true);
 
     std::string s4 = "ggg";
-    ASSERT_THROW(wc.getEntryReference(s4), std::invalid_argument);
+    ASSERT_THROW(wc.getEntryReference(s4), std::runtime_error);
 }
 
 TEST(word_counter, isEmpty)
@@ -281,7 +314,7 @@ TEST(word_counter, highestLowestCount)
     word_counter wc(arr);
 
     ASSERT_TRUE(wc.highesCount() == e2);
-    ASSERT_TRUE(wc.lowestCount() == e2);
+    ASSERT_TRUE(wc.lowestCount() == e1);
 }
 
 TEST(word_counter, numberOfWords)
@@ -311,10 +344,11 @@ TEST(word_counter, getList)
     std::vector<entry> arr = {e1, e2, e3};
     word_counter wc(arr);
 
-    ASSERT_TRUE(wc.getList()[0] == e3);
+    ASSERT_TRUE(wc.getList()[0] == e1);
     ASSERT_TRUE(wc.getList()[1] == e2);
-    ASSERT_TRUE(wc.getList()[2] == e1);
+    ASSERT_TRUE(wc.getList()[2] == e3);
 }
+
 TEST(word_counter, addWord)
 {
     std::string s1 = "ccc";
@@ -330,10 +364,11 @@ TEST(word_counter, addWord)
     std::string s4 = "aba";
     wc.addWord(s4);
 
-    ASSERT_TRUE(wc.getList()[0] == e3);
-    ASSERT_TRUE(*wc.getList()[1] == s4);
-    ASSERT_TRUE(wc.getList()[2] == e2);
-    ASSERT_TRUE(wc.getList()[3] == e1);
+    ASSERT_TRUE(wc.getList()[0] == e1);
+    ASSERT_TRUE(*wc.getList()[1] == s2);
+    ASSERT_TRUE(wc.getList()[2] == e3);
+    ASSERT_TRUE(*wc.getList()[3] == s4);
+    ASSERT_TRUE((int)wc.getList()[3] == 1);
 }
 
 TEST(word_counter, addWords_from_vector_of_strings)
@@ -350,16 +385,25 @@ TEST(word_counter, addWords_from_vector_of_strings)
 
     std::string s4 = "aba";
     std::string s5 = "eee";
-    std::vector<std::string> wordsToAdd = {s4, s5};
+    std::string s6 = "aaa";
+
+    std::vector<std::string> wordsToAdd = {s4, s5, s6};
     wc.addWords(wordsToAdd);
 
-    ASSERT_TRUE(wc.getList()[0] == e3);
-    ASSERT_TRUE(*wc.getList()[1] == s4);
-    ASSERT_TRUE((int)wc.getList()[1] == 1);
-    ASSERT_TRUE(wc.getList()[2] == e2);
-    ASSERT_TRUE(wc.getList()[3] == e1);
+    ASSERT_TRUE(*wc.getList()[0] == s1);
+    ASSERT_TRUE((int)wc.getList()[0] == 1);
+
+    ASSERT_TRUE(*wc.getList()[1] == s2);
+    ASSERT_TRUE((int)wc.getList()[1] == 20);
+
+    ASSERT_TRUE(*wc.getList()[2] == s3);
+    ASSERT_TRUE((int)wc.getList()[2] == 4);
+
+    ASSERT_TRUE(*wc.getList()[3] == s4);
+    ASSERT_TRUE((int)wc.getList()[3] == 1);
+
     ASSERT_TRUE(*wc.getList()[4] == s5);
-    ASSERT_TRUE((int)wc.getList()[4] == 1);
+    ASSERT_TRUE((int)wc.getList()[3] == 1);
 }
 
 TEST(word_counter, addWords_from_vector_of_entries)
@@ -381,10 +425,10 @@ TEST(word_counter, addWords_from_vector_of_entries)
     std::vector<entry> wordsToAdd = {e4, e5};
     wc.addWords(wordsToAdd);
 
-    ASSERT_TRUE(wc.getList()[0] == e3);
-    ASSERT_TRUE(wc.getList()[1] == e4);
-    ASSERT_TRUE(wc.getList()[2] == e2);
-    ASSERT_TRUE(wc.getList()[3] == e1);
+    ASSERT_TRUE(wc.getList()[0] == e1);
+    ASSERT_TRUE(wc.getList()[1] == e2);
+    ASSERT_TRUE(wc.getList()[2] == e3);
+    ASSERT_TRUE(wc.getList()[3] == e4);
     ASSERT_TRUE(wc.getList()[4] == e5);
 }
 
@@ -402,20 +446,26 @@ TEST(word_counter, addWords_from_stream)
 
     std::stringstream ss;
 
-    ss << "aaa"
-       << "zzz"
-       << "bbb"
-       << "aba";
+    ss << "aaa "
+       << "zzz "
+       << "bbb "
+       << "aba ";
     wc.addWords(ss);
 
-    ASSERT_TRUE(*wc.getList()[0] == "aaa");
-    ASSERT_TRUE((int)wc.getList()[0] == 4);
-    ASSERT_TRUE(*wc.getList()[1] == "aba");
-    ASSERT_TRUE((int)wc.getList()[1] == 1);
-    ASSERT_TRUE(*wc.getList()[2] == "bbb");
-    ASSERT_TRUE((int)wc.getList()[2] == 21);
-    ASSERT_TRUE(*wc.getList()[3] == "ccc");
+    ASSERT_TRUE(*wc.getList()[0] == "ccc");
+    ASSERT_TRUE((int)wc.getList()[0] == 1);
+
+    ASSERT_TRUE(*wc.getList()[1] == "bbb");
+    ASSERT_TRUE((int)wc.getList()[1] == 21);
+
+    ASSERT_TRUE(*wc.getList()[2] == "aaa");
+    ASSERT_TRUE((int)wc.getList()[2] == 4);
+
+    ASSERT_TRUE(*wc.getList()[3] == "zzz");
     ASSERT_TRUE((int)wc.getList()[3] == 1);
+
+    ASSERT_TRUE(*wc.getList()[4] == "aba");
+    ASSERT_TRUE((int)wc.getList()[4] == 1);
 }
 
 TEST(word_counter, clearCounter)
@@ -436,9 +486,9 @@ TEST(word_counter, clearCounter)
 
 TEST(word_counter, addAndSaveOperator)
 {
-    std::string s1 = "ccc";
+    std::string s1 = "aaa";
     entry e1(s1, 1);
-    std::string s2 = "aaa";
+    std::string s2 = "ccc";
     entry e2(s2, 20);
 
     std::string s3 = "aaa";
@@ -454,9 +504,21 @@ TEST(word_counter, addAndSaveOperator)
     wc1 += wc2;
 
     ASSERT_TRUE(*wc1.getList()[0] == "aaa");
-    ASSERT_TRUE((int)wc1.getList()[0] == 23);
-    ASSERT_TRUE(*wc1.getList()[1] == "bbb");
-    ASSERT_TRUE((int)wc1.getList()[1] == 7);
-    ASSERT_TRUE(*wc1.getList()[2] == "ccc");
-    ASSERT_TRUE((int)wc1.getList()[2] == 1);
+    ASSERT_TRUE((int)wc1.getList()[0] == 4);
+
+    ASSERT_TRUE(*wc1.getList()[1] == "ccc");
+    ASSERT_TRUE((int)wc1.getList()[1] == 20);
+
+    ASSERT_TRUE(*wc1.getList()[2] == "bbb");
+    ASSERT_TRUE((int)wc1.getList()[2] == 7);
+}
+
+TEST(word_counter, alpha_iterator)
+{
+    ASSERT_TRUE(false);
+}
+
+TEST(word_counter, freq_iterator)
+{
+    ASSERT_TRUE(false);
 }

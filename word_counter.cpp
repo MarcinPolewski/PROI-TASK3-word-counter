@@ -121,3 +121,30 @@ word_counter &word_counter::operator+=(word_counter const &wc)
         addEntry(it);
     return *this;
 }
+
+std::ostream &operator<<(std::ostream &stream, const word_counter &counter) // loads counter to stream
+{
+    stream << "{\n";
+    for (auto const &it : counter.getList())
+    {
+        stream << "  " << it << '\n';
+    }
+    stream << "}\n";
+    return stream;
+}
+std::istream &operator>>(std::istream &stream, word_counter &counter) // read counter status from strream
+{
+
+    std::vector<entry> entList;
+
+    stream.get(); // skipping the first element
+
+    std::istringstream ss("");
+
+    entry e;
+    while (stream >> ss && ss.getStr() != "}")
+    {
+        ss >> e;
+        entList.push_back(e);
+    }
+}

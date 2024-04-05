@@ -75,19 +75,20 @@ void word_counter::addWord(std::string &word)
 {
     entry temp(word, 1);
     std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), temp);
-    if (*temp != *(*it))
-        it++;
-    else
+
+    if (it == entryList.end() || *temp != *(*it)) // no such word in list
         entryList.insert(it, entry(word, 1));
+    else
+        it++;
 }
 
 void word_counter::addEntry(entry &ent)
 {
-    int idx = getIdx(*ent);
-    if (idx == -1)
-        entryList.push_back(ent);
+    std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), ent);
+    if (it == entryList.end() || *ent != *(*it)) // no such word in list
+        entryList.insert(it, ent);
     else
-        entryList[idx] += ent;
+        it += ent;
 }
 
 void word_counter::addWords(std::istream &stream)
@@ -123,27 +124,29 @@ word_counter &word_counter::operator+=(word_counter const &wc)
 
 std::ostream &operator<<(std::ostream &stream, const word_counter &counter) // loads counter to stream
 {
-    stream << "{\n";
-    for (auto const &it : counter.getList())
-    {
-        stream << "  " << it << '\n';
-    }
-    stream << "}\n";
+    // stream << "{\n";
+    // for (auto const &it : counter.getList())
+    // {
+    //     stream << "  " << it << '\n';
+    // }
+    // stream << "}\n";
     return stream;
 }
 std::istream &operator>>(std::istream &stream, word_counter &counter) // read counter status from strream
 {
 
-    std::vector<entry> entList;
+    // std::vector<entry> entList;
 
-    stream.get(); // skipping the first element
+    // stream.get(); // skipping the first element
 
-    std::istringstream ss("");
+    // std::istringstream ss("");
 
-    entry e;
-    while (stream >> ss && ss.getStr() != "}")
-    {
-        ss >> e;
-        entList.push_back(e);
-    }
+    // entry e;
+    // while (stream >> ss && ss.getStr() != "}")
+    // {
+    //     ss >> e;
+    //     entList.push_back(e);
+    // }
+
+    return stream;
 }

@@ -40,7 +40,7 @@ TEST(entry, getString)
 {
     std::string s = "baba";
     entry e = entry(s, 5);
-    ASSERT_EQ(e.getString(), "[baba,5]");
+    ASSERT_EQ(e.getString(), "[baba 5]");
 }
 
 TEST(entry, outputStream)
@@ -50,7 +50,7 @@ TEST(entry, outputStream)
 
     std::stringstream ss;
     std::stringstream expected;
-    expected << "[baba,5]";
+    expected << "[baba 5]";
     ss << e;
     ASSERT_EQ(ss.str(), expected.str());
 }
@@ -58,7 +58,7 @@ TEST(entry, outputStream)
 TEST(entry, inputStream_1)
 {
     std::stringstream input;
-    input << "[baba,5]";
+    input << "[baba 5]";
     entry e;
 
     input >> e;
@@ -66,58 +66,76 @@ TEST(entry, inputStream_1)
     ASSERT_EQ(*e, "baba");
 }
 
-TEST(entry, inputStream_invalid_structure_no_comma)
-{
-    std::stringstream input;
-    input << "[baba5]";
-    entry e;
-
-    ASSERT_THROW(input >> e, std::runtime_error);
-}
-
-TEST(entry, inputStream_no_first_value)
-{
-    std::stringstream input;
-    input << "[,5]";
-    entry e;
-
-    ASSERT_THROW(input >> e, std::runtime_error);
-}
-
-TEST(entry, inputStream_no_last_value)
-{
-    std::stringstream input;
-    input << "[baba,]";
-    entry e;
-
-    ASSERT_THROW(input >> e, std::runtime_error);
-}
-
 TEST(entry, inputStream_no_bracket_1)
 {
     std::stringstream input;
-    input << "baba5]";
+    input << "baba 5]";
     entry e;
 
-    ASSERT_THROW(input >> e, std::runtime_error);
+    ASSERT_THROW(input >> e, std::invalid_argument);
 }
 
 TEST(entry, inputStream_no_bracket_2)
 {
     std::stringstream input;
-    input << "[baba5";
+    input << "[baba 5";
     entry e;
 
-    ASSERT_THROW(input >> e, std::runtime_error);
+    ASSERT_THROW(input >> e, std::invalid_argument);
 }
 
-TEST(entry, inputStream_no_numer_as_count)
+TEST(entry, inputStream_no_space)
 {
     std::stringstream input;
-    input << "[baba,a]";
+    input << "[baba5]";
     entry e;
 
-    ASSERT_THROW(input >> e, std::runtime_error);
+    ASSERT_THROW(input >> e, std::invalid_argument);
+}
+
+TEST(entry, inputStream_NAN_instread_of_count_1)
+{
+    std::stringstream input;
+    input << "[baba a]";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::invalid_argument);
+}
+
+TEST(entry, inputStream_NAN_instread_of_count_2)
+{
+    std::stringstream input;
+    input << "[baba aaa]";
+    entry e;
+
+    ASSERT_THROW(input >> e, std::invalid_argument);
+}
+
+TEST(entry, inputStream_two_entries_1)
+{
+    std::stringstream input;
+    input << "[baba 4][aaaa 5]";
+    entry e1, e2;
+
+    input >> e1 >> e2;
+
+    ASSERT_EQ(*e1, "baba");
+    ASSERT_EQ((int)e1, 4);
+    ASSERT_EQ(*e2, "aaaa");
+    ASSERT_EQ((int)e2, 5);
+}
+TEST(entry, inputStream_two_entries_2)
+{
+    std::stringstream input;
+    input << "[baba 4] [aaaa 5]";
+    entry e1, e2;
+
+    input >> e1 >> e2;
+
+    ASSERT_EQ(*e1, "baba");
+    ASSERT_EQ((int)e1, 4);
+    ASSERT_EQ(*e2, "aaaa");
+    ASSERT_EQ((int)e2, 5);
 }
 
 TEST(entry, addAndSaveOperator)
@@ -149,7 +167,7 @@ TEST(entry, greater_and_lesser_operator_1)
     std::string s2 = "aaa";
     entry e2 = entry(s2, 2);
 
-    ASSERT_TRUE(e1 < e2);
+    ASSERT_FALSE(e1 < e2);
     ASSERT_FALSE(e1 > e2);
 }
 
@@ -166,12 +184,12 @@ TEST(entry, greater_and_lesser_operator_2)
 
 TEST(entry, greater_and_lesser_operator_3)
 {
-    std::string s1 = "aaa";
+    std::string s1 = "A";
     entry e1 = entry(s1, 2);
-    std::string s2 = "bbb";
+    std::string s2 = "Z";
     entry e2 = entry(s2, 2);
 
-    ASSERT_FALSE(e1 < e2);
+    ASSERT_TRUE(e2 > e1);
     ASSERT_FALSE(e1 > e2);
 }
 
@@ -223,46 +241,6 @@ TEST(word_counter, init_and_getter_2)
     ASSERT_EQ(wc.getList()[2] == e3, true);
 }
 
-TEST(word_counter, getIdx)
-{
-    std::string s1 = "ccc";
-    entry e1(s1, 1);
-    std::string s2 = "bbb";
-    entry e2(s2, 2);
-    std::string s3 = "aaa";
-    entry e3(s3, 3);
-
-    std::vector<entry> arr = {e1, e2, e3};
-
-    word_counter wc(arr);
-    ASSERT_EQ(wc.getIdx(s1), 0);
-    ASSERT_EQ(wc.getIdx(s2), 1);
-    ASSERT_EQ(wc.getIdx(s3), 2);
-
-    std::string s4 = "ggg";
-    ASSERT_EQ(wc.getIdx(s4), -1);
-}
-
-TEST(word_counter, getEntryReference)
-{
-    std::string s1 = "ccc";
-    entry e1(s1, 1);
-    std::string s2 = "bbb";
-    entry e2(s2, 2);
-    std::string s3 = "aaa";
-    entry e3(s3, 3);
-
-    std::vector<entry> arr = {e1, e2, e3};
-
-    word_counter wc(arr);
-    ASSERT_EQ(wc.getEntryReference(s3) == e3, true);
-    ASSERT_EQ(wc.getEntryReference(s2) == e2, true);
-    ASSERT_EQ(wc.getEntryReference(s1) == e1, true);
-
-    std::string s4 = "ggg";
-    ASSERT_THROW(wc.getEntryReference(s4), std::runtime_error);
-}
-
 TEST(word_counter, isEmpty)
 {
     std::string s1 = "ccc";
@@ -278,7 +256,7 @@ TEST(word_counter, isEmpty)
     ASSERT_TRUE(wc.isEmpty());
 
     wc.addWords(arr);
-    ASSERT_TRUE(!wc.isEmpty());
+    ASSERT_FALSE(wc.isEmpty());
 }
 
 TEST(word_counter, hasWord)
@@ -364,11 +342,31 @@ TEST(word_counter, addWord)
     std::string s4 = "aba";
     wc.addWord(s4);
 
-    ASSERT_TRUE(wc.getList()[0] == e1);
-    ASSERT_TRUE(*wc.getList()[1] == s2);
-    ASSERT_TRUE(wc.getList()[2] == e3);
-    ASSERT_TRUE(*wc.getList()[3] == s4);
+    ASSERT_TRUE(wc.getList()[0] == e3);
+    ASSERT_TRUE(*wc.getList()[1] == s4);
+    ASSERT_TRUE(wc.getList()[2] == e2);
+    ASSERT_TRUE(*wc.getList()[3] == s1);
     ASSERT_TRUE((int)wc.getList()[3] == 1);
+}
+
+TEST(word_counter, addWord_empty_list)
+{
+
+    word_counter wc;
+
+    std::string s1 = "aba";
+    wc.addWord(s1);
+    std::string s2 = "ccc";
+    wc.addWord(s2);
+    std::string s3 = "aaa";
+    wc.addWord(s3);
+
+    ASSERT_TRUE(*wc.getList()[0] == s3);
+    ASSERT_TRUE(*wc.getList()[1] == s1);
+    ASSERT_TRUE(*wc.getList()[2] == s2);
+    ASSERT_TRUE((int)wc.getList()[0] == 1);
+    ASSERT_TRUE((int)wc.getList()[1] == 1);
+    ASSERT_TRUE((int)wc.getList()[2] == 1);
 }
 
 TEST(word_counter, addWords_from_vector_of_strings)

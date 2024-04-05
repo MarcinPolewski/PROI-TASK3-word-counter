@@ -34,15 +34,18 @@ public:
 
     void clearCounter();
 
+    // operators
     word_counter &operator+=(word_counter const &wc);
     entry const &operator[](std::string const &word) const;
     entry &operator[](std::string const &word);
 
+    // iterators
     class alpha_iterator
     {
         std::vector<entry>::const_iterator it;
 
     public:
+        alpha_iterator(std::vector<entry>::const_iterator iter) : it(iter){};
         alpha_iterator operator++(int);
         alpha_iterator &operator++();
         entry const &operator*() const;
@@ -58,6 +61,12 @@ public:
         entry const &operator*() const;
         bool operator!=(freq_iterator const &wc) const;
     };
+
+    alpha_iterator alphaBegin();
+    alpha_iterator alphaEnd();
+
+    freq_iterator freqBegin();
+    freq_iterator freqEnd();
 };
 
 std::ostream &operator<<(std::ostream &stream, const word_counter &counter); // loads counter to stream

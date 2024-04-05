@@ -171,3 +171,40 @@ std::istream &operator>>(std::istream &stream, word_counter &counter) // read co
 
     return stream;
 }
+// implementation of alpha_iterator
+word_counter::alpha_iterator word_counter::alpha_iterator::operator++(int)
+{
+    word_counter::alpha_iterator oldValue = *this;
+    ++it;
+    return oldValue;
+}
+word_counter::alpha_iterator &word_counter::alpha_iterator::operator++()
+{
+    ++it;
+    return *this;
+}
+entry const &word_counter::alpha_iterator::operator*() const
+{
+    return *it;
+}
+bool word_counter::alpha_iterator::operator!=(alpha_iterator const &wc) const
+{
+    return it != wc.it;
+}
+
+word_counter::alpha_iterator word_counter::alphaBegin()
+{
+    return alpha_iterator(entryList.begin());
+}
+word_counter::alpha_iterator word_counter::alphaEnd()
+{
+    return alpha_iterator(entryList.end());
+}
+
+// implementation of freq_iterator
+word_counter::freq_iterator word_counter::freqBegin()
+{
+}
+word_counter::freq_iterator word_counter::freqEnd()
+{
+}

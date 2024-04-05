@@ -25,7 +25,7 @@ bool word_counter::isEmpty() const
 
 bool word_counter::hasWord(std::string const &word) const
 {
-    return getIdx(word) != -1;
+    return getEntry(word) != entryList.end();
 }
 entry word_counter::highesCount() const
 {

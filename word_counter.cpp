@@ -1,23 +1,21 @@
 #include "word_counter.h"
 
-int word_counter::getIdx(std::string const &word) const
+std::vector<entry>::iterator word_counter::getEntryNonConst(std::string word)
 {
-    for (std::vector<entry>::const_iterator it = entryList.begin();
-         it != entryList.end();
-         it++)
-    {
-        if (**it == word)
-            return it - entryList.begin();
-    }
-    return -1;
+    entry temp(word, 1);
+    std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), temp);
+    if (it == entryList.end() || *temp != *(*it))
+        return entryList.end();
+    return it;
 }
 
-const entry &word_counter::getEntryReference(std::string const &word)
+std::vector<entry>::const_iterator word_counter::getEntry(std::string const &word) const
 {
-    int idx = getIdx(word);
-    if (idx == -1)
-        throw std::runtime_error("word not found");
-    return entryList[idx];
+    entry temp(word, 1);
+    std::vector<entry>::const_iterator it = std::lower_bound(entryList.begin(), entryList.end(), temp);
+    if (it == entryList.end() || *temp != *(*it))
+        return entryList.end();
+    return it;
 }
 
 bool word_counter::isEmpty() const

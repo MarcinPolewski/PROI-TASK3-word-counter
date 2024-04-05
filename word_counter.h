@@ -9,14 +9,14 @@ class word_counter
 {
     std::vector<entry> entryList;
     void sortListByValue();
-    std::vector<entry>::iterator &getEntryNonConst(std::string word);
+    std::vector<entry>::iterator getEntryNonConst(std::string word);
 
 public:
     word_counter() = default;
     word_counter(std::vector<entry> &entryList) : entryList(entryList){};
 
     // look up values
-    std::vector<entry>::const_iterator &getEntry(std::string const &word) const;
+    std::vector<entry>::const_iterator getEntry(std::string const &word) const;
     bool isEmpty() const;
     bool hasWord(std::string const &word) const;
     entry const &highesCount() const;

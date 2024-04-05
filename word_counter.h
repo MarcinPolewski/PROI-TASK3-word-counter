@@ -9,8 +9,7 @@
 class word_counter
 {
     std::vector<entry> entryList;
-    void sortListlexicographically();
-    void sortListByFrequency();
+    void sortListByValue();
 
 public:
     word_counter() = default;
@@ -18,13 +17,13 @@ public:
 
     // look up values
     int getIdx(std::string const &word) const; // returns index in list of element or -1 if it was not found
-    const entry &getEntryReference(std::string const &word);
+    entry const &getEntryReference(std::string const &word);
     bool isEmpty() const;
     bool hasWord(std::string const &word) const;
-    entry highesCount() const;
-    entry lowestCount() const;
+    entry const &highesCount() const;
+    entry const &lowestCount() const;
     int numberOfWords() const;
-    const std::vector<entry> &getList() const;
+    std::vector<entry> const &getList() const;
 
     // modifires
     void addWord(std::string &word);
@@ -36,6 +35,8 @@ public:
     void clearCounter();
 
     word_counter &operator+=(word_counter const &wc);
+    entry const &operator[](std::string const &word) const;
+    entry &operator[](std::string const &word);
 
     class alpha_iterator
     {

@@ -10,18 +10,15 @@ class entry
 
 public:
     entry() = default;
-    entry(std::string &value, int count = 1);
+    entry(std::string const &value, int count = 1);
 
     entry operator++(int);                // post increment (for instance entry++)
     std::string const &operator*() const; // retreave value
     operator int() const;                 // retreave count
     entry &operator+=(const entry &ent);
     bool operator==(const entry &ent) const;
-    bool operator>(const entry &ent) const; // compares count
+    bool operator>(const entry &ent) const; // compares values
     bool operator<(const entry &ent) const;
-
-    // true if lEntry.value is greater
-    bool cmp_lexicographically(const entry &lEntry, const entry &rEntry) const;
 
     std::string getString() const;
 };

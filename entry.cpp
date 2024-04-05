@@ -1,6 +1,6 @@
 #include "entry.h"
 
-entry::entry(std::string &value, int count)
+entry::entry(std::string const &value, int count)
 {
     if (count < 1)
         throw std::invalid_argument("count cannot be of negative value");
@@ -21,17 +21,12 @@ bool entry::operator==(const entry &ent) const
 
 bool entry::operator<(const entry &ent) const
 {
-    return count < (int)ent;
+    return value < *ent;
 }
 
 bool entry::operator>(const entry &ent) const
 {
-    return count > (int)ent;
-}
-
-bool entry::cmp_lexicographically(const entry &lEntry, const entry &rEntry) const
-{
-    return *lEntry > *rEntry;
+    return value > *ent;
 }
 
 std::string const &entry::operator*() const
@@ -48,9 +43,9 @@ std::string entry::getString() const
 {
     std::string s = "[";
     s += value;
-    s += ",";
+    s += ' ';
     s += std::to_string(count);
-    s += "]";
+    s += ']';
     return s;
 }
 
@@ -80,28 +75,20 @@ entry &entry::operator+=(const entry &ent)
 
 std::istream &operator>>(std::istream &stream, entry &ent)
 {
-    std::string s;
-    stream >> s;
+    std::string word;
+    int count;
+    char left, right;
 
-    int lastCommaIdx = findLastComma(s);
+    stream >> left;
+    if (stream.eof()) // checking if provided stream is empty alredy
+        return stream;
+    stream >> word >> count >> right;
+    // if non int value is provided inplace of count
+    // stream would put fail bit on, next values would not be read
+    if (stream.fail() || left != '[' || right != ']')
+        throw std::invalid_argument("invalid syntax of entry, expected: [word count]");
 
-    if (s.front() != '[' ||
-        s.back() != ']' ||
-        lastCommaIdx == -1 ||
-        lastCommaIdx == 1 ||          // there's no first value
-        lastCommaIdx == s.size() - 2) // there's no second value
-        throw std::runtime_error("invalid entry syntax");
-
-    try
-    {
-        std::string value = s.substr(1, lastCommaIdx - 1);
-        int count = std::stoi(s.substr(lastCommaIdx + 1, s.size() - lastCommaIdx - 1));
-        ent = entry(value, count);
-    }
-    catch (...)
-    {
-        throw std::runtime_error("could not extract individual values");
-    }
+    ent = entry(word, count);
 
     return stream;
 }

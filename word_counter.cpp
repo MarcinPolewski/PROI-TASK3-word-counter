@@ -40,8 +40,8 @@ entry const &word_counter::highesCount() const
     int maxElementIdx = 0;
     for (auto it = entryList.begin() + 1; it != entryList.end(); it++)
     {
-        // we are comparing entries, which are compared alphabetically
-        if (*it > entryList[maxElementIdx])
+        // comparing counts
+        if ((int)(*it) > (int)(entryList[maxElementIdx]))
             maxElementIdx = it - entryList.begin();
     }
     return entryList[maxElementIdx];
@@ -55,7 +55,7 @@ entry const &word_counter::lowestCount() const
     int minElementIdx = 0;
     for (auto it = entryList.begin() + 1; it != entryList.end(); it++)
     {
-        if (*it < entryList[minElementIdx])
+        if ((int)(*it) < (int)(entryList[minElementIdx]))
             minElementIdx = it - entryList.begin();
     }
     return entryList[minElementIdx];

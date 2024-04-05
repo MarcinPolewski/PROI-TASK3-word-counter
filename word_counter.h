@@ -1,7 +1,6 @@
 #pragma once
 
 #include "entry.h"
-#include "vector"
 
 #include <iostream>
 #include <sstream>
@@ -10,14 +9,14 @@ class word_counter
 {
     std::vector<entry> entryList;
     void sortListByValue();
+    std::vector<entry>::iterator &getEntryNonConst(std::string word);
 
 public:
     word_counter() = default;
     word_counter(std::vector<entry> &entryList) : entryList(entryList){};
 
     // look up values
-    int getIdx(std::string const &word) const; // returns index in list of element or -1 if it was not found
-    entry const &getEntryReference(std::string const &word);
+    std::vector<entry>::const_iterator &getEntry(std::string const &word) const;
     bool isEmpty() const;
     bool hasWord(std::string const &word) const;
     entry const &highesCount() const;

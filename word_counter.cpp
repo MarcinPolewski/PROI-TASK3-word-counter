@@ -1,5 +1,10 @@
 #include "word_counter.h"
 
+void word_counter::sortListByValue()
+{
+    std::sort(entryList.begin(), entryList.end());
+}
+
 std::vector<entry>::iterator word_counter::getEntryNonConst(std::string word)
 {
     entry temp(word, 1);
@@ -35,6 +40,7 @@ entry const &word_counter::highesCount() const
     int maxElementIdx = 0;
     for (auto it = entryList.begin() + 1; it != entryList.end(); it++)
     {
+        // we are comparing entries, which are compared alphabetically
         if (*it > entryList[maxElementIdx])
             maxElementIdx = it - entryList.begin();
     }

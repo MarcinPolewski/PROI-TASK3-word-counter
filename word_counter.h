@@ -13,7 +13,7 @@ class word_counter
 
 public:
     word_counter() = default;
-    word_counter(std::vector<entry> &entryList) : entryList(entryList){};
+    word_counter(std::vector<entry> &entryList) : entryList(entryList) { sortListByValue(); };
 
     // look up values
     std::vector<entry>::const_iterator getEntry(std::string const &word) const;

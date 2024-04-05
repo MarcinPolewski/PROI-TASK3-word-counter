@@ -73,11 +73,12 @@ const std::vector<entry> &word_counter::getList() const
 // modifires
 void word_counter::addWord(std::string &word)
 {
-    int idx = getIdx(word);
-    if (idx == -1)
-        entryList.push_back(entry(word, 1));
+    entry temp(word, 1);
+    std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), temp);
+    if (*temp != *(*it))
+        it++;
     else
-        entryList[idx]++;
+        entryList.insert(it, entry(word, 1));
 }
 
 void word_counter::addEntry(entry &ent)

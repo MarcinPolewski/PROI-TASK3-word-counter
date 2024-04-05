@@ -85,7 +85,7 @@ void word_counter::addWord(std::string &word)
     if (it == entryList.end() || *temp != *(*it)) // no such word in list
         entryList.insert(it, entry(word, 1));
     else
-        it++;
+        (*it)++;
 }
 
 void word_counter::addEntry(entry &ent)
@@ -94,7 +94,7 @@ void word_counter::addEntry(entry &ent)
     if (it == entryList.end() || *ent != *(*it)) // no such word in list
         entryList.insert(it, ent);
     else
-        it += ent;
+        (*it) += ent;
 }
 
 void word_counter::addWords(std::istream &stream)

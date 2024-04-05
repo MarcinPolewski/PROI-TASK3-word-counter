@@ -211,6 +211,19 @@ TEST(entry, greater_and_lesser_operator_3)
     ASSERT_FALSE(e1 > e2);
 }
 
+TEST(entry, assign_operator)
+{
+    std::string s1 = "A";
+    entry e1 = entry(s1, 2);
+    std::string s2 = "Z";
+    entry e2 = entry(s2, 2);
+
+    e2 = e1;
+    ASSERT_TRUE(e1 == e2);
+    e2++;
+    ASSERT_FALSE(e1 == e2);
+}
+
 TEST(findLastComma, test1)
 {
     std::string s = "[baba,1]";
@@ -257,6 +270,25 @@ TEST(word_counter, init_and_getter_2)
     ASSERT_EQ(wc.getList()[0] == e3, true);
     ASSERT_EQ(wc.getList()[1] == e2, true);
     ASSERT_EQ(wc.getList()[2] == e1, true);
+}
+
+TEST(word_counter, getEntry)
+{
+    std::string s1 = "ccc";
+    entry e1(s1, 1);
+    std::string s2 = "bbb";
+    entry e2(s2, 2);
+    std::string s3 = "aaa";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr = {e1, e2, e3};
+
+    word_counter wc = word_counter(arr);
+
+    ASSERT_EQ(wc.getEntry("aaa"), wc.getList().begin());
+    ASSERT_EQ(wc.getEntry("bbb"), wc.getList().begin() + 1);
+    ASSERT_EQ(wc.getEntry("ccc"), wc.getList().begin() + 2);
+    ASSERT_EQ(wc.getEntry("dada"), wc.getList().end());
 }
 
 TEST(word_counter, isEmpty)
@@ -587,6 +619,72 @@ TEST(word_counter, addAndSaveOperator)
 
     ASSERT_TRUE(*wc1.getList()[2] == "ccc");
     ASSERT_TRUE((int)wc1.getList()[2] == 20);
+}
+
+TEST(word_counter, subscriptOperator)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "ccc";
+    entry e2(s2, 20);
+
+    std::string s3 = "bbb";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr1 = {e1, e2, e3};
+    word_counter wc(arr1);
+
+    ASSERT_EQ(wc[s1], e1);
+    ASSERT_EQ(wc[s3], e3);
+    ASSERT_EQ(wc[s2], e2);
+
+    std::string s5 = "asdf";
+    ASSERT_THROW(wc[s5], std::invalid_argument);
+}
+
+TEST(word_counter, subscriptOperator_lvalue)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "ccc";
+    entry e2(s2, 20);
+
+    std::string s3 = "bbb";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr1 = {e1, e2, e3};
+    word_counter wc(arr1);
+
+    entry e4(s1, 5);
+
+    wc[s1] = e4;
+    ASSERT_EQ(wc[s1], e4);
+
+    std::string s5 = "asdf";
+    entry e5(s5, 6);
+    ASSERT_THROW(wc[s5] = e5, std::invalid_argument);
+}
+
+TEST(word_counter, subscriptOperator_rvalue)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "ccc";
+    entry e2(s2, 20);
+
+    std::string s3 = "bbb";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr1 = {e1, e2, e3};
+    word_counter wc(arr1);
+
+    entry e4;
+    e4 = wc[s1];
+    ASSERT_EQ(e1, e4);
+
+    std::string s5 = "asdf";
+    entry e5;
+    ASSERT_THROW(e5 = wc[s5], std::invalid_argument);
 }
 
 TEST(word_counter, alpha_iterator)

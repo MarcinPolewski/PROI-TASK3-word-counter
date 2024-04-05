@@ -128,6 +128,21 @@ word_counter &word_counter::operator+=(word_counter const &wc)
     return *this;
 }
 
+entry const &word_counter::operator[](std::string const &word) const
+{
+    std::vector<entry>::const_iterator it = getEntry(word);
+    if (it == entryList.end())
+        throw std::invalid_argument("word counter does not have such word");
+    return *it;
+}
+entry &word_counter::operator[](std::string const &word)
+{
+    std::vector<entry>::iterator it = getEntryNonConst(word);
+    if (it == entryList.end())
+        throw std::invalid_argument("word counter does not have such word");
+    return *it;
+}
+
 std::ostream &operator<<(std::ostream &stream, const word_counter &counter) // loads counter to stream
 {
     // stream << "{\n";

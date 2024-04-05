@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 class word_counter
 {

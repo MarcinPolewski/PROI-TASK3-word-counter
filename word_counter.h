@@ -1,23 +1,24 @@
 #pragma once
 
 #include "entry.h"
-#include "vector"
 
+#include <vector>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 class word_counter
 {
     std::vector<entry> entryList;
     void sortListByValue();
+    std::vector<entry>::iterator &getEntryNonConst(std::string word);
 
 public:
     word_counter() = default;
     word_counter(std::vector<entry> &entryList) : entryList(entryList){};
 
     // look up values
-    int getIdx(std::string const &word) const; // returns index in list of element or -1 if it was not found
-    entry const &getEntryReference(std::string const &word);
+    std::vector<entry>::const_iterator const &getEntry(std::string const &word);
     bool isEmpty() const;
     bool hasWord(std::string const &word) const;
     entry const &highesCount() const;
@@ -34,10 +35,12 @@ public:
 
     void clearCounter();
 
+    // operators
     word_counter &operator+=(word_counter const &wc);
     entry const &operator[](std::string const &word) const;
     entry &operator[](std::string const &word);
 
+    // iterators
     class alpha_iterator
     {
         std::vector<entry>::const_iterator it;

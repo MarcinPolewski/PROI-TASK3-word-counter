@@ -1,23 +1,15 @@
 #include "word_counter.h"
 
-int word_counter::getIdx(std::string const &word) const
+std::vector<entry>::const_iterator &word_counter::getEntryNonConst(std::string word)
 {
-    for (std::vector<entry>::const_iterator it = entryList.begin();
-         it != entryList.end();
-         it++)
-    {
-        if (**it == word)
-            return it - entryList.begin();
-    }
-    return -1;
+    entry temp = entry(word, 1);
+    return std::lower_bound(entryList.begin(), entryList.end(), temporary);
 }
 
-const entry &word_counter::getEntryReference(std::string const &word)
+std::vector<entry>::iterator entry &word_counter::getEntry(std::string const &word)
 {
-    int idx = getIdx(word);
-    if (idx == -1)
-        throw std::runtime_error("word not found");
-    return entryList[idx];
+    entry temp = entry(word, 1);
+    return std::lower_bound(entryList.begin(), entryList.end(), temporary);
 }
 
 bool word_counter::isEmpty() const
@@ -27,34 +19,53 @@ bool word_counter::isEmpty() const
 
 bool word_counter::hasWord(std::string const &word) const
 {
-    return getIdx(word) != -1;
+    entry temporary(word, 1);
+    return std::binary_search(entryList.begin(), entryList.end(), temporary);
 }
-entry word_counter::highesCount() const
+entry const &word_counter::highesCount() const
 {
     if (isEmpty())
         throw std::runtime_error("cannot find max element on empty list");
 
-    entry max = entryList[0];
-    for (auto const &it : entryList)
+    int maxElementIdx = 0;
+    for (auto it = entryList.begin() + 1; it != entryList.end(); it++)
     {
-        if (max < it)
-            max = it;
+        if (*it > entryList[maxElementIdx])
+            maxElementIdx = it - entryList.begin();
     }
-    return max;
+    return entryList[maxElementIdx];
+
+    // entry const &max = entryList[0];
+    // for (auto const &it : entryList)
+    // {
+    //     if (max < it)
+    //         max = it;
+    // }
+    // return max;
 }
 
-entry word_counter::lowestCount() const
+entry const &word_counter::lowestCount() const
 {
     if (isEmpty())
-        throw std::runtime_error("cannot find min element on empty list");
+        throw std::runtime_error("cannot find max element on empty list");
 
-    entry min = entryList[0];
-    for (auto const &it : entryList)
+    int minElementIdx = 0;
+    for (auto it = entryList.begin() + 1; it != entryList.end(); it++)
     {
-        if (min > it)
-            min = it;
+        if (*it < entryList[minElementIdx])
+            minElementIdx = it - entryList.begin();
     }
-    return min;
+    return entryList[minElementIdx];
+    // if (isEmpty())
+    //     throw std::runtime_error("cannot find min element on empty list");
+
+    // entry min = entryList[0];
+    // for (auto const &it : entryList)
+    // {
+    //     if (min > it)
+    //         min = it;
+    // }
+    // return min;
 }
 
 int word_counter::numberOfWords() const
@@ -75,11 +86,11 @@ const std::vector<entry> &word_counter::getList() const
 // modifires
 void word_counter::addWord(std::string &word)
 {
-    int idx = getIdx(word);
-    if (idx == -1)
-        entryList.push_back(entry(word, 1));
+    entry &ent = getEntryNonConstReference(word);
+    if (ent == entryList.end())
+        addWord(word);
     else
-        entryList[idx]++;
+        ent++;
 }
 
 void word_counter::addEntry(entry &ent)
@@ -135,16 +146,18 @@ std::ostream &operator<<(std::ostream &stream, const word_counter &counter) // l
 std::istream &operator>>(std::istream &stream, word_counter &counter) // read counter status from strream
 {
 
-    std::vector<entry> entList;
+    // std::vector<entry> entList;
 
-    stream.get(); // skipping the first element
+    // stream.get(); // skipping the first element
 
-    std::istringstream ss("");
+    // std::istringstream ss("");
 
-    entry e;
-    while (stream >> ss && ss.getStr() != "}")
-    {
-        ss >> e;
-        entList.push_back(e);
-    }
+    // entry e;
+    // while (stream >> ss && ss.getStr() != "}")
+    // {
+    //     ss >> e;
+    //     entList.push_back(e);
+    // }
+
+    return stream;
 }

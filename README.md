@@ -1,22 +1,22 @@
 # Decyzje projektowe 
 ### entry
 - entry zawiera typ int, a nie typ unsigned int (tak było w instrukcji)
-- count w klasie entry musi mieć wartość conajmniej 1, gdy jest 0, to nie ma po co tego trzymać
+- count w klasie entry musi mieć wartość co najmniej 1, gdy jest 0, to nie ma po co tego trzymać
 - musimy mieć domyślny konstruktor, inaczej nie moglibyśmy trzymać jej w wektorze
 ### word_counter
-- potrzebujemy domyślengo konstruktora, bo możemy chcieć zadeklarować licznik przed jego uzyciem
-- po utworzeniu licznika, przy uzyciu domyślnego kontruktora, jego stan to pusty vector ??? 
-    - do sprawdzania stanu słuzy funkcja isEmpty()
-- zwracamy tylko const-referencji na entry, dlatego zeby uzytkownik nie podmienił nam tego na inny obiekt - wtedy moglibyśmy stracić porządek w liście
-    - wyjątkiem jest operator [] uzywany jako lvalue. Zaimplementowałem go dlatego, ze tak było w poleceniu, ale jego uzycie stwarza ryzyko, ze uzytkownik zrobi nam psikusa, chociażby wstawiając inne słowo, co zepsuje nam porządek listy, a my nawet tego nie odnotujemy. Naturalnie zaburzy to dzialanie wstawiania,szukania kolejnych elementow
-- funcje highest/lowestCount działają wewnątrz na indeksach,a nie referencjach, gdyz pojawiał się problem z modyfikatorami const
-- entyrList jest posortowany alfabetycznie
-    - wstawianie do listy, szukanie elementu są wmiare proste(wyszukiwanie binarne)
+- potrzebujemy domyślnego konstruktora, bo możemy chcieć zadeklarować licznik przed jego użyciem
+- po utworzeniu licznika, przy użyciu domyślnego konstruktora, jego stan to pusty vector ??? 
+    - do sprawdzania stanu służy funkcja isEmpty()
+- zwracamy tylko const-referencję na entry, dlatego żeby użytkownik nie podmienił nam tego na inny obiekt - wtedy moglibyśmy stracić porządek w liście
+    - wyjątkiem jest operator [] używany jako lvalue. Zaimplementowałem go dlatego, że tak było w poleceniu, ale jego użycie stwarza ryzyko, że użytkownik zrobi nam psikusa, choćby wstawiając inne słowo, co zepsuje nam porządek listy, a my nawet tego nie odnotujemy. Naturalnie zaburzy to działanie wstawiania, szukania kolejnych elementów
+- funkcje highest/lowestCount działają wewnątrz na indeksach, a nie referencjach, gdyż pojawiał się problem z modyfikatorami const
+- entryList jest posortowany alfabetycznie
+    - wstawianie do listy, szukanie elementu są w miarę proste (wyszukiwanie binarne)
     - łatwe działanie iteratora alfanumerycznego
-- Funckje wyszukiwania działają na iteratorach, nie na referencjach, bo wtedy łatwiej sygnalizować nieznalecienie elementu(zwracamy wtedy .end())
-- getEntry nie wykorzystuje getEntryNonConst dlatego ze występowały problemy z konwersją z iteratora na const iterator(teoretycznie powinno to działać, ale funckja ma modyfikator const, przez to uycie funckji nie const nie działa)
-- przeciązenie opertatora ( entry &operator[](std::string const &word) ) gdy zostanie wyszukany element, którego nie ma wyrzuci błąd, gdyż nie jesteśmy mu wstanie podać liczności słowa, na które nie natrafiliśmy wgl. Inną opcją byłoby wzrócenie referencji na obiekt tego słowa o liczności zero, ale klasa entry na to nie pozwala i nie wpłyneło by to jakoś drastycznie na działanie klasy.
-- freq_iterator idzie po elementach patrząc najpier na kolejność, potem na porządek alfabetyczny
+- Funkcje wyszukiwania działają na iteratorach, nie na referencjach, bo wtedy łatwiej sygnalizować nieznalezienie elementu (zwracamy wtedy .end())
+- getEntry nie wykorzystuje getEntryNonConst dlatego, że występowały problemy z konwersją z iteratora na const iterator (teoretycznie powinno to działać, ale funkcja ma modyfikator const, przez to użycie funkcji nie const nie działa)
+- przeciążenie operatora ( entry &operator[](std::string const &word) ) gdy zostanie wyszukany element, którego nie ma, wyrzuci błąd, ponieważ nie jesteśmy mu w stanie podać liczności słowa, na które nie natrafiliśmy w ogóle. Inną opcją byłoby zwrócenie referencji na obiekt tego słowa o liczności zero, ale klasa entry na to nie pozwala i nie wpłynęłoby to jakoś drastycznie na działanie klasy.
+- freq_iterator idzie po elementach patrząc najpierw na kolejność, potem na porządek alfabetyczny
 
 # Funkcjonalność licznika:
 - dodanie słowa ze:
@@ -28,10 +28,10 @@
     - vectora entries
 - wyczyszczenie licznika
 - zapis zawartości licznika do pliku
-- odczyt zawartoścli licznika z pliku
+- odczyt zawartości licznika z pliku
 - zwrócenie najbardziej/najmniej popularnej wartości
 - policzenie całkowitej ilości słów
-- sprawdzenei czy licznik jest pusty
+- sprawdzenie czy licznik jest pusty
 - iterator przechodzący przez słowa alfabetycznie - lex_iterator
     - lex_begin()
     - lex_end()
@@ -39,10 +39,9 @@
     - freq_begin()
     - freq_end()
 - operatory indeksowania []
-- += operator dodający stan innego licznka
+- += operator dodający stan innego licznika
 
 # TODO / Pytania
-- czy porównywanie stringów przy uzyciu > lub < jest ok ?? Niby wycofane w cpp 20
-    - zastapione przez std::lexicographical_compare()
-- czy można pozbyć się zmiennej temporary, przy korzsytaniu z binary_search i lower_bound, np. czy można napisać specjalną funkcje porównująca
-
+- czy porównywanie stringów przy użyciu > lub < jest ok ?? Niby wycofane w cpp 20
+    - zastąpione przez std::lexicographical_compare()
+- czy można pozbyć się zmiennej temporary, przy korzystaniu z binary_search i lower_bound, np. czy można napisać specjalną funkcję porównującą

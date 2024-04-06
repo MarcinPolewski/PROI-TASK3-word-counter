@@ -202,9 +202,81 @@ word_counter::alpha_iterator word_counter::alphaEnd()
 }
 
 // implementation of freq_iterator
+
+word_counter::freq_iterator::freq_iterator(std::vector<entry>::const_iterator entryListBegin, std::vector<entry>::const_iterator entryListEnd)
+    : entryListBegin(entryListBegin), entryListEnd(entryListEnd)
+{
+    std::vector<entry>::const_iterator firstElement = entryListBegin;
+    for (std::vector<entry>::const_iterator i = entryListBegin + 1; i != entryListEnd; i++)
+    {
+        if ((int)(*i) < (int)(*firstElement))
+            firstElement = i;
+    }
+
+    it = firstElement;
+}
+
+std::vector<entry>::const_iterator word_counter::freq_iterator::findNext()
+{
+    /*
+        we are looking for the smallest greater element, that is same count but greater
+        alphabetically or bigger in count.
+
+        elements greater alphabetically are only to the right of it, elements of smaller
+        count could be everywhere
+    */
+    std::vector<entry>::const_iterator nextMinimal = it;
+    bool nextFound = false;
+    for (std::vector<entry>::const_iterator i = it + 1; i != entryListEnd; i++)
+    {
+        if ((int)(*i) == (int)(*it)) // if count is the same, but alphabethically is greater(must be, because list is sorted)
+            return i;
+        // if it.count < i.count and(!nextFound || nextFound && (int)(*i) < (int)(*nextMinimal))
+        if ((int)(*it) < (int)(*i) && (!nextFound || (int)(*i) < (int)(*nextMinimal)))
+        {
+            nextMinimal = i;
+            nextFound = true;
+        }
+    }
+    for (std::vector<entry>::const_iterator i = entryListBegin; i != it; i++)
+    {
+        if ((int)(*it) < (int)(*i) && (!nextFound || (int)(*i) < (int)(*nextMinimal)))
+        {
+            nextMinimal = i;
+            nextFound = true;
+        }
+    }
+
+    if (!nextFound)
+        return entryListEnd;
+    return nextMinimal;
+}
+
+word_counter::freq_iterator word_counter::freq_iterator::operator++(int)
+{
+    auto oldValue = *this;
+    it = findNext();
+    return oldValue;
+}
+word_counter::freq_iterator &word_counter::freq_iterator::operator++()
+{
+    it = findNext();
+    return *this;
+}
+entry const &word_counter::freq_iterator::operator*() const
+{
+    return *it;
+}
+bool word_counter::freq_iterator::operator!=(freq_iterator const &wc) const
+{
+    return it != wc.it;
+}
+
 word_counter::freq_iterator word_counter::freqBegin()
 {
+    return freq_iterator(entryList.begin(), entryList.end());
 }
 word_counter::freq_iterator word_counter::freqEnd()
 {
+    return freq_iterator(entryList.end(), entryList.begin(), entryList.end());
 }

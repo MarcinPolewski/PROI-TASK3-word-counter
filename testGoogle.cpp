@@ -665,6 +665,29 @@ TEST(word_counter, subscriptOperator_lvalue)
     ASSERT_THROW(wc[s5] = e5, std::invalid_argument);
 }
 
+TEST(word_counter, subscriptOperator_changing_word)
+{
+    /*
+        test shows danger of using [] operator, after inserting
+        e4 in plase of e1, order of list is disrupted
+    */
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "ccc";
+    entry e2(s2, 20);
+
+    std::string s3 = "bbb";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr1 = {e1, e2, e3};
+    word_counter wc(arr1);
+
+    entry e4(s2, 5);
+
+    wc[s1] = e4;
+    ASSERT_FALSE(wc[s1] == e4);
+}
+
 TEST(word_counter, subscriptOperator_rvalue)
 {
     std::string s1 = "aaa";
@@ -730,5 +753,41 @@ TEST(word_counter, alpha_iterator_not_equal_operator)
 
 TEST(word_counter, freq_iterator)
 {
-    ASSERT_TRUE(false);
+    std::string s1 = "aaa";
+    entry e1(s1, 2);
+    std::string s2 = "bbb";
+    entry e2(s2, 1);
+    std::string s3 = "ccc";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr = {e1, e2, e3};
+    word_counter wc(arr);
+
+    word_counter::freq_iterator it = wc.freqBegin();
+    ASSERT_EQ(*it, e2);
+    ASSERT_EQ(*(it++), e2);
+    ASSERT_EQ(*it, e1);
+    ASSERT_EQ(*(++it), e3);
+    ASSERT_EQ(*it, e3);
+    it++;
+    ASSERT_FALSE(it != wc.freqEnd());
 }
+
+// TEST(word_counter, freq_iterator_not_equal_operator)
+// {
+//     std::string s1 = "aaa";
+//     entry e1(s1, 1);
+//     std::string s2 = "bbb";
+//     entry e2(s2, 20);
+//     std::string s3 = "ccc";
+//     entry e3(s3, 3);
+
+//     std::vector<entry> arr = {e1, e2, e3};
+//     word_counter wc(arr);
+
+//     word_counter::alpha_iterator it1 = wc.alphaBegin();
+//     word_counter::alpha_iterator it2 = wc.alphaBegin();
+//     ASSERT_FALSE(it1 != it2);
+//     it1++;
+//     ASSERT_TRUE(it1 != it2);
+// }

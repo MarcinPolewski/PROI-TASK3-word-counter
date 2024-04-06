@@ -54,8 +54,18 @@ public:
     class freq_iterator
     {
         std::vector<entry>::const_iterator it;
+        std::vector<entry>::const_iterator entryListBegin;
+        std::vector<entry>::const_iterator entryListEnd;
+
+        std::vector<entry>::const_iterator findNext();
 
     public:
+        freq_iterator(std::vector<entry>::const_iterator entryListBegin,
+                      std::vector<entry>::const_iterator entryListEnd);
+        freq_iterator(std::vector<entry>::const_iterator iter,
+                      std::vector<entry>::const_iterator entryListBegin,
+                      std::vector<entry>::const_iterator entryListEnd)
+            : it(iter), entryListBegin(entryListBegin), entryListEnd(entryListEnd){};
         freq_iterator operator++(int);
         freq_iterator &operator++();
         entry const &operator*() const;

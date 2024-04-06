@@ -145,29 +145,39 @@ entry &word_counter::operator[](std::string const &word)
 
 std::ostream &operator<<(std::ostream &stream, const word_counter &counter) // loads counter to stream
 {
-    // stream << "{\n";
-    // for (auto const &it : counter.getList())
-    // {
-    //     stream << "  " << it << '\n';
-    // }
-    // stream << "}\n";
+    stream << "{\n";
+    for (auto const &it : counter.getList())
+    {
+        stream << it << '\n';
+    }
+    stream << "}\n";
     return stream;
 }
 std::istream &operator>>(std::istream &stream, word_counter &counter) // read counter status from strream
 {
 
-    // std::vector<entry> entList;
+    std::vector<entry> entList;
 
-    // stream.get(); // skipping the first element
+    char c;
+    stream >> c;
+    if (!stream.good() || c != '{')
+        throw std::invalid_argument("unable to read word_counter from stream");
 
-    // std::istringstream ss("");
+    entry temopraryEntry;
+    while (stream.good())
+    {
+        try
+        {
+            stream >> temopraryEntry;
+            entList.push_back(temopraryEntry);
+        }
+        catch (std::invalid_argument)
+        {
+            break;
+        }
+    }
 
-    // entry e;
-    // while (stream >> ss && ss.getStr() != "}")
-    // {
-    //     ss >> e;
-    //     entList.push_back(e);
-    // }
+    counter.addWords(entList);
 
     return stream;
 }
@@ -231,7 +241,7 @@ std::vector<entry>::const_iterator word_counter::freq_iterator::findNext()
     {
         if ((int)(*i) == (int)(*it)) // if count is the same, but alphabethically is greater(must be, because list is sorted)
             return i;
-        // if it.count < i.count and(!nextFound || nextFound && (int)(*i) < (int)(*nextMinimal))
+        // if it.count < i.count and(!nextFound or (nextFound && (int)(*i) < (int)(*nextMinimal)))
         if ((int)(*it) < (int)(*i) && (!nextFound || (int)(*i) < (int)(*nextMinimal)))
         {
             nextMinimal = i;

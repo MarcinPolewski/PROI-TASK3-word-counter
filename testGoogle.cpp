@@ -879,3 +879,77 @@ TEST(word_counter, freq_iterator_not_equal_operator)
     it1++;
     ASSERT_TRUE(it1 != it2);
 }
+
+TEST(word_counter, input_stream)
+{
+    word_counter wc;
+
+    std::stringstream input;
+    input << "{\n"
+          << "[aaa 1]\n"
+          << "[bbb 20]\n"
+          << "[ccc 3]\n"
+          << "}\n";
+
+    input >> wc;
+
+    ASSERT_EQ(*wc.getList()[0], "aaa");
+    ASSERT_EQ((int)wc.getList()[0], 1);
+
+    ASSERT_EQ(*wc.getList()[1], "bbb");
+    ASSERT_EQ((int)wc.getList()[1], 20);
+
+    ASSERT_EQ(*wc.getList()[2], "ccc");
+    ASSERT_EQ((int)wc.getList()[2], 3);
+}
+
+TEST(word_counter, output_stream)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "bbb";
+    entry e2(s2, 20);
+    std::string s3 = "ccc";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr = {e1, e2, e3};
+    word_counter wc(arr);
+
+    std::stringstream expected;
+    expected << "{\n"
+             << "[aaa 1]\n"
+             << "[bbb 20]\n"
+             << "[ccc 3]\n"
+             << "}\n";
+
+    std::stringstream result;
+    result << wc;
+
+    ASSERT_EQ(expected.str(), result.str());
+}
+
+TEST(word_counter, streams_compatibility)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "bbb";
+    entry e2(s2, 20);
+    std::string s3 = "ccc";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr = {e1, e2, e3};
+    word_counter wc1(arr), wc;
+
+    std::stringstream ss;
+    ss << wc1;
+    ss >> wc;
+
+    ASSERT_EQ(*wc.getList()[0], "aaa");
+    ASSERT_EQ((int)wc.getList()[0], 1);
+
+    ASSERT_EQ(*wc.getList()[1], "bbb");
+    ASSERT_EQ((int)wc.getList()[1], 20);
+
+    ASSERT_EQ(*wc.getList()[2], "ccc");
+    ASSERT_EQ((int)wc.getList()[2], 3);
+}

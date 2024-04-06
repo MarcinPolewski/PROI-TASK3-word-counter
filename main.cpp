@@ -29,16 +29,17 @@ int main()
     // std::ifstream fileReader;
     std::ofstream fileWriter;
     // 1. load word_counter status from file
-    // try
-    // {
-    //     std::ifstream fileReader = openFileForReading("wordCounterState.txt");
-    //     fileReader >> counter;
-    //     fileReader.close();
-    // }
-    // catch (...)
-    // {
-    //     std::cout << "opening wordCounterState.txt for reading unsuccesssful\n";
-    // }
+    try
+    {
+        std::ifstream fileReader = openFileForReading("wordCounterState.txt");
+        fileReader >> counter;
+        fileReader.close();
+    }
+    catch (...)
+    {
+        std::cout << "opening wordCounterState.txt for reading unsuccesssful\n";
+        return 2;
+    }
 
     // 2. read moby dick
     try
@@ -50,6 +51,7 @@ int main()
     catch (...)
     {
         std::cout << "opening moby_dick.txt for reading unsuccesssful\n";
+        return 2;
     }
 
     // 3. write  word_counter to file(erasing previous contents)
@@ -62,6 +64,7 @@ int main()
     catch (...)
     {
         std::cout << "opening wordCounterState.txt for writing unsuccessful\n";
+        return 2;
     }
 
     // 4. display statistics on cout

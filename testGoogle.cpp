@@ -751,7 +751,7 @@ TEST(word_counter, alpha_iterator_not_equal_operator)
     ASSERT_TRUE(it1 != it2);
 }
 
-TEST(word_counter, freq_iterator)
+TEST(word_counter, freq_iterator_1)
 {
     std::string s1 = "aaa";
     entry e1(s1, 2);
@@ -773,21 +773,109 @@ TEST(word_counter, freq_iterator)
     ASSERT_FALSE(it != wc.freqEnd());
 }
 
-// TEST(word_counter, freq_iterator_not_equal_operator)
-// {
-//     std::string s1 = "aaa";
-//     entry e1(s1, 1);
-//     std::string s2 = "bbb";
-//     entry e2(s2, 20);
-//     std::string s3 = "ccc";
-//     entry e3(s3, 3);
+TEST(word_counter, freq_iterator_2)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 4);
+    std::string s2 = "bbb";
+    entry e2(s2, 1);
+    std::string s3 = "ccc";
+    entry e3(s3, 3);
+    std::string s4 = "ddd";
+    entry e4(s4, 3);
 
-//     std::vector<entry> arr = {e1, e2, e3};
-//     word_counter wc(arr);
+    std::vector<entry> arr = {e1, e2, e3, e4};
+    word_counter wc(arr);
 
-//     word_counter::alpha_iterator it1 = wc.alphaBegin();
-//     word_counter::alpha_iterator it2 = wc.alphaBegin();
-//     ASSERT_FALSE(it1 != it2);
-//     it1++;
-//     ASSERT_TRUE(it1 != it2);
-// }
+    word_counter::freq_iterator it = wc.freqBegin();
+    ASSERT_EQ(*(it++), e2);
+    ASSERT_EQ(*(it++), e3);
+    ASSERT_EQ(*(it++), e4);
+    ASSERT_EQ(*(it++), e1);
+    ASSERT_FALSE(it != wc.freqEnd());
+}
+
+TEST(word_counter, freq_iterator_3)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "bbb";
+    entry e2(s2, 2);
+    std::string s3 = "ccc";
+    entry e3(s3, 3);
+    std::string s4 = "ddd";
+    entry e4(s4, 4);
+
+    std::vector<entry> arr = {e1, e2, e3, e4};
+    word_counter wc(arr);
+
+    word_counter::freq_iterator it = wc.freqBegin();
+    ASSERT_EQ(*(it++), e1);
+    ASSERT_EQ(*(it++), e2);
+    ASSERT_EQ(*(it++), e3);
+    ASSERT_EQ(*(it++), e4);
+    ASSERT_FALSE(it != wc.freqEnd());
+}
+
+TEST(word_counter, freq_iterator_4)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 4);
+    std::string s2 = "bbb";
+    entry e2(s2, 3);
+    std::string s3 = "ccc";
+    entry e3(s3, 2);
+    std::string s4 = "ddd";
+    entry e4(s4, 1);
+
+    std::vector<entry> arr = {e1, e2, e3, e4};
+    word_counter wc(arr);
+
+    word_counter::freq_iterator it = wc.freqBegin();
+    ASSERT_EQ(*(it++), e4);
+    ASSERT_EQ(*(it++), e3);
+    ASSERT_EQ(*(it++), e2);
+    ASSERT_EQ(*(it++), e1);
+    ASSERT_FALSE(it != wc.freqEnd());
+}
+
+TEST(word_counter, freq_iterator_same_count)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "bbb";
+    entry e2(s2, 1);
+    std::string s3 = "ccc";
+    entry e3(s3, 1);
+
+    std::vector<entry> arr = {e1, e2, e3};
+    word_counter wc(arr);
+
+    word_counter::freq_iterator it = wc.freqBegin();
+    ASSERT_EQ(*it, e1);
+    ASSERT_EQ(*(it++), e1);
+    ASSERT_EQ(*it, e2);
+    ASSERT_EQ(*(++it), e3);
+    ASSERT_EQ(*it, e3);
+    it++;
+    ASSERT_FALSE(it != wc.freqEnd());
+}
+
+TEST(word_counter, freq_iterator_not_equal_operator)
+{
+    std::string s1 = "aaa";
+    entry e1(s1, 1);
+    std::string s2 = "bbb";
+    entry e2(s2, 20);
+    std::string s3 = "ccc";
+    entry e3(s3, 3);
+
+    std::vector<entry> arr = {e1, e2, e3};
+    word_counter wc(arr);
+
+    word_counter::freq_iterator it1 = wc.freqBegin();
+    word_counter::freq_iterator it2 = wc.freqBegin();
+    ASSERT_FALSE(it1 != it2);
+    it1++;
+    ASSERT_TRUE(it1 != it2);
+}

@@ -7,18 +7,17 @@ void word_counter::sortListByValue()
 
 std::vector<entry>::iterator word_counter::getEntryNonConst(std::string word)
 {
-    entry temp(word, 1);
-    std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), temp);
-    if (it == entryList.end() || *temp != *(*it))
+    std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), word);
+    if (it == entryList.end() || word != *(*it))
         return entryList.end();
     return it;
 }
 
 std::vector<entry>::const_iterator word_counter::getEntry(std::string const &word) const
 {
-    entry temp(word, 1);
-    std::vector<entry>::const_iterator it = std::lower_bound(entryList.begin(), entryList.end(), temp);
-    if (it == entryList.end() || *temp != *(*it))
+
+    std::vector<entry>::const_iterator it = std::lower_bound(entryList.begin(), entryList.end(), word);
+    if (it == entryList.end() || word != *(*it))
         return entryList.end();
     return it;
 }
@@ -79,10 +78,9 @@ const std::vector<entry> &word_counter::getList() const
 // modifires
 void word_counter::addWord(std::string &word)
 {
-    entry temp(word, 1);
-    std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), temp);
+    std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), word);
 
-    if (it == entryList.end() || *temp != *(*it)) // no such word in list
+    if (it == entryList.end() || word != *(*it)) // no such word in list
         entryList.insert(it, entry(word, 1));
     else
         (*it)++;

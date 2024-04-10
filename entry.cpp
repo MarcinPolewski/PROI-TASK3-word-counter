@@ -19,6 +19,11 @@ bool entry::operator==(const entry &ent) const
     return (value == *ent && count == (int)ent);
 }
 
+bool entry::operator==(std::string st) const
+{
+    return value == st;
+}
+
 bool entry::operator<(const entry &ent) const
 {
     return value < *ent;

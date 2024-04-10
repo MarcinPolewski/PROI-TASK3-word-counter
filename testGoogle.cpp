@@ -211,7 +211,7 @@ TEST(entry, greater_and_lesser_operator_3)
     ASSERT_FALSE(e1 > e2);
 }
 
-TEST(entry, assign_operator)
+TEST(entry, equals_operator_operator1)
 {
     std::string s1 = "A";
     entry e1 = entry(s1, 2);
@@ -222,6 +222,17 @@ TEST(entry, assign_operator)
     ASSERT_TRUE(e1 == e2);
     e2++;
     ASSERT_FALSE(e1 == e2);
+}
+
+TEST(entry, equals_operator_2)
+{
+    std::string s1 = "A";
+    entry e1 = entry(s1, 2);
+    std::string s2 = "Z";
+    entry e2 = entry(s2, 2);
+
+    ASSERT_TRUE(e1 == s1);
+    ASSERT_TRUE(e2 == s2);
 }
 
 TEST(findLastComma, test1)

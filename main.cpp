@@ -29,23 +29,27 @@ int main()
     // std::ifstream fileReader;
     std::ofstream fileWriter;
     // 1. load word_counter status from file
-    try
-    {
-        std::ifstream fileReader = openFileForReading("wordCounterState.txt");
-        fileReader >> counter;
-        fileReader.close();
-    }
-    catch (...)
-    {
-        std::cout << "opening wordCounterState.txt for reading unsuccesssful\n";
-        return 2;
-    }
+    // try
+    // {
+    //     std::ifstream fileReader = openFileForReading("wordCounterState.txt");
+    //     fileReader >> counter;
+    //     fileReader.close();
+    // }
+    // catch (...)
+    // {
+    //     std::cout << "opening wordCounterState.txt for reading unsuccesssful\n";
+    //     return 2;
+    // }
 
     // 2. read moby dick
     try
     {
+        auto start_time = std::chrono::high_resolution_clock::now();
         std::ifstream fileReader = openFileForReading("moby_dick.txt");
         counter.addWords(fileReader);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto time = end_time - start_time;
+        std::cout << "read moby_dick.txt in: " << time / std::chrono::milliseconds(1) << " ms.\n";
         fileReader.close();
     }
     catch (...)
@@ -84,6 +88,28 @@ int main()
     std::cout << "\ndoes stream have words:\n";
     std::cout << "banana: " << (counter.hasWord("banana") ? "yes" : "no") << '\n';
     std::cout << "circumambulate: " << (counter.hasWord("circumambulate") ? "yes" : "no") << '\n';
+
+    // 5. iterate over word counter by frequency
+    auto start_time = std::chrono::high_resolution_clock::now();
+    for (auto it = counter.freqBegin(); it != counter.freqEnd(); it++)
+    {
+        *it;
+        // std::cout << *it << '\n';
+    }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto time = end_time - start_time;
+    std::cout << "iterated over moby dick by frequency in: " << time / std::chrono::milliseconds(1) << " ms.\n";
+
+    // 5.Iterating alphabetically
+    start_time = std::chrono::high_resolution_clock::now();
+    for (auto it = counter.alphaBegin(); it != counter.alphaEnd(); it++)
+    {
+        *it;
+        // std::cout << *it << '\n';
+    }
+    end_time = std::chrono::high_resolution_clock::now();
+    time = end_time - start_time;
+    std::cout << "iterated over moby dick alphabetically in: " << time / std::chrono::milliseconds(1) << " ms.\n";
 
     return 0;
 }

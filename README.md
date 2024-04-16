@@ -41,6 +41,13 @@
 - operatory indeksowania []
 - += operator dodający stan innego licznika
 
+# Time
+- build moby dick 133ms
+- iterated over moby dick by frequency in: 13 ms.
+- iterated over moby dick alphabetically in: 0 ms.
+
+
+
 # TODO / Pytania
 - czy porównywanie stringów przy użyciu > lub < jest ok ?? Niby wycofane w cpp 20
     - zastąpione przez std::lexicographical_compare()

@@ -5,7 +5,7 @@ void word_counter::sortListByValue()
     std::sort(entryList.begin(), entryList.end());
 }
 
-std::vector<entry>::iterator word_counter::getEntryNonConst(const std::string &word)
+std::vector<entry>::iterator word_counter::getEntry(const std::string &word)
 {
     std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), word);
     if (it == entryList.end() || word != *(*it))
@@ -135,7 +135,7 @@ entry const &word_counter::operator[](std::string const &word) const
 }
 entry &word_counter::operator[](std::string const &word)
 {
-    std::vector<entry>::iterator it = getEntryNonConst(word);
+    std::vector<entry>::iterator it = getEntry(word);
     if (it == entryList.end())
         throw std::invalid_argument("word counter does not have such word");
     return *it;

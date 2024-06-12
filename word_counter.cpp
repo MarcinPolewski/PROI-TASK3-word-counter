@@ -5,7 +5,7 @@ void word_counter::sortListByValue()
     std::sort(entryList.begin(), entryList.end());
 }
 
-std::vector<entry>::iterator word_counter::getEntryNonConst(std::string word)
+std::vector<entry>::iterator word_counter::getEntryNonConst(const std::string &word)
 {
     std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), word);
     if (it == entryList.end() || word != *(*it))
@@ -76,7 +76,7 @@ const std::vector<entry> &word_counter::getList() const
 }
 
 // modifires
-void word_counter::addWord(std::string &word)
+void word_counter::addWord(std::string const &word)
 {
     std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), word);
 
@@ -86,7 +86,7 @@ void word_counter::addWord(std::string &word)
         (*it)++;
 }
 
-void word_counter::addEntry(entry &ent)
+void word_counter::addEntry(entry const &ent)
 {
     std::vector<entry>::iterator it = std::lower_bound(entryList.begin(), entryList.end(), ent);
     if (it == entryList.end() || *ent != *(*it)) // no such word in list
@@ -101,12 +101,12 @@ void word_counter::addWords(std::istream &stream)
     while (stream >> s)
         addWord(s);
 }
-void word_counter::addWords(std::vector<std::string> arr)
+void word_counter::addWords(std::vector<std::string> const &arr)
 {
     for (auto it : arr)
         addWord(it);
 }
-void word_counter::addWords(std::vector<entry> arr)
+void word_counter::addWords(std::vector<entry> const &arr)
 {
     for (auto it : arr)
     {

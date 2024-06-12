@@ -11,11 +11,11 @@ class word_counter
 {
     std::vector<entry> entryList;
     void sortListByValue();
-    std::vector<entry>::iterator getEntryNonConst(std::string word);
+    std::vector<entry>::iterator getEntryNonConst(const std::string &word);
 
 public:
     word_counter() = default;
-    word_counter(std::vector<entry> &entryList) : entryList(entryList) { sortListByValue(); };
+    word_counter(std::vector<entry> const &entryList) : entryList(entryList) { sortListByValue(); };
 
     // look up values
     std::vector<entry>::const_iterator getEntry(std::string const &word) const;
@@ -27,11 +27,11 @@ public:
     std::vector<entry> const &getList() const;
 
     // modifires
-    void addWord(std::string &word);
-    void addEntry(entry &ent);
+    void addWord(std::string const &word);
+    void addEntry(entry const &ent);
     void addWords(std::istream &stream);
-    void addWords(std::vector<std::string> arr);
-    void addWords(std::vector<entry> arr);
+    void addWords(std::vector<std::string> const &arr);
+    void addWords(std::vector<entry> const &arr);
 
     void clearCounter();
 

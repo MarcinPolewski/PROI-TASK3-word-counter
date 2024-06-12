@@ -31,36 +31,8 @@ bool word_counter::hasWord(std::string const &word) const
 {
     return getEntry(word) != entryList.end();
 }
-entry const &word_counter::highesCount() const
-{
-    if (isEmpty())
-        throw std::runtime_error("cannot find max element on empty list");
 
-    int maxElementIdx = 0;
-    for (auto it = entryList.begin() + 1; it != entryList.end(); it++)
-    {
-        // comparing counts
-        if ((int)(*it) > (int)(entryList[maxElementIdx]))
-            maxElementIdx = it - entryList.begin();
-    }
-    return entryList[maxElementIdx];
-}
-
-entry const &word_counter::lowestCount() const
-{
-    if (isEmpty())
-        throw std::runtime_error("cannot find max element on empty list");
-
-    int minElementIdx = 0;
-    for (auto it = entryList.begin() + 1; it != entryList.end(); it++)
-    {
-        if ((int)(*it) < (int)(entryList[minElementIdx]))
-            minElementIdx = it - entryList.begin();
-    }
-    return entryList[minElementIdx];
-}
-
-int word_counter::numberOfWords() const
+int word_counter::size() const
 {
     int wordCount = 0;
     for (auto const &it : entryList)

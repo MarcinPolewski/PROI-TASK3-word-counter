@@ -316,7 +316,7 @@ TEST(word_counter, hasWord)
     ASSERT_TRUE(!wc.hasWord(s4));
 }
 
-TEST(word_counter, highestLowestCount)
+TEST(word_counter, size)
 {
     std::string s1 = "ccc";
     entry e1(s1, 1);
@@ -328,23 +328,7 @@ TEST(word_counter, highestLowestCount)
     std::vector<entry> arr = {e1, e2, e3};
     word_counter wc(arr);
 
-    ASSERT_TRUE(wc.highesCount() == e2);
-    ASSERT_TRUE(wc.lowestCount() == e1);
-}
-
-TEST(word_counter, numberOfWords)
-{
-    std::string s1 = "ccc";
-    entry e1(s1, 1);
-    std::string s2 = "bbb";
-    entry e2(s2, 20);
-    std::string s3 = "aaa";
-    entry e3(s3, 3);
-
-    std::vector<entry> arr = {e1, e2, e3};
-    word_counter wc(arr);
-
-    ASSERT_EQ(wc.numberOfWords(), 24);
+    ASSERT_EQ(wc.size(), 24);
 }
 
 TEST(word_counter, getList)

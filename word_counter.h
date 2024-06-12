@@ -21,9 +21,7 @@ public:
     std::vector<entry>::iterator getEntry(const std::string &word);
     bool isEmpty() const;
     bool hasWord(std::string const &word) const;
-    entry const &highesCount() const;
-    entry const &lowestCount() const;
-    int numberOfWords() const;
+    int size() const;
     std::vector<entry> const &getList() const;
 
     // modifires

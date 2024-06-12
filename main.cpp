@@ -79,11 +79,8 @@ int main()
         std::cout << *it << '\n';
     }
 
-    std::cout << "\nmost popular word:\n";
-    std::cout << counter.highesCount() << '\n';
-
     std::cout << "\ntotal sum of words:\n";
-    std::cout << counter.numberOfWords() << '\n';
+    std::cout << counter.size() << '\n';
 
     std::cout << "\ndoes stream have words:\n";
     std::cout << "banana: " << (counter.hasWord("banana") ? "yes" : "no") << '\n';

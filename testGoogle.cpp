@@ -235,30 +235,6 @@ TEST(entry, equals_operator_2)
     ASSERT_TRUE(e2 == s2);
 }
 
-TEST(findLastComma, test1)
-{
-    std::string s = "[baba,1]";
-    ASSERT_EQ(findLastComma(s), 5);
-}
-
-TEST(findLastComma, test2)
-{
-    std::string s = "[b,a,ba,1]";
-    ASSERT_EQ(findLastComma(s), 7);
-}
-
-TEST(findLastComma, test3)
-{
-    std::string s = "[b,,ba1]";
-    ASSERT_EQ(findLastComma(s), 3);
-}
-
-TEST(findLastComma, test_no_comma)
-{
-    std::string s = "[bba1]";
-    ASSERT_EQ(findLastComma(s), -1);
-}
-
 TEST(word_counter, init_and_getters_1)
 {
     // testing if does not throw an error

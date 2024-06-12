@@ -60,16 +60,6 @@ std::ostream &operator<<(std::ostream &stream, entry const &ent)
     return stream;
 }
 
-int findLastComma(std::string s)
-{
-    for (int i = s.size() - 1; i > 0; i--)
-    {
-        if (s[i] == ',')
-            return i;
-    }
-    return -1;
-}
-
 entry &entry::operator+=(const entry &ent)
 {
     if (value != *ent)

@@ -24,7 +24,5 @@ public:
     std::string getString() const;
 };
 
-int findLastComma(std::string s);
-
 std::ostream &operator<<(std::ostream &stream, entry const &ent);
 std::istream &operator>>(std::istream &stream, entry &ent);

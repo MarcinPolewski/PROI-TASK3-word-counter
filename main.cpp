@@ -3,73 +3,43 @@
 #include <fstream>
 #include <stdexcept>
 
-std::ifstream openFileForReading(std::string filePath)
-{
-    std::ifstream fileReader(filePath);
-    if (!fileReader.good())
-    {
-        throw std::runtime_error("could not open file");
-    }
-    return fileReader;
-}
-
-std::ofstream openFileForWriting(std::string filePath)
-{
-    std::ofstream fileReader(filePath);
-    if (!fileReader.good())
-    {
-        throw std::runtime_error("could not open file");
-    }
-    return fileReader;
-}
-
 int main()
 {
+    // 1. read state
     word_counter counter;
-    // std::ifstream fileReader;
-    std::ofstream fileWriter;
-    // 1. load word_counter status from file
-    // try
-    // {
-    //     std::ifstream fileReader = openFileForReading("wordCounterState.txt");
-    //     fileReader >> counter;
-    //     fileReader.close();
-    // }
-    // catch (...)
-    // {
-    //     std::cout << "opening wordCounterState.txt for reading unsuccesssful\n";
-    //     return 2;
-    // }
+    std::ifstream wordCounterStateReader("wordCounterState.txt");
+    if (!wordCounterStateReader.good())
+    {
+        std::cout << "wordCounterState.txt for reading unsuccesssful\n";
+        return 2;
+    }
+    wordCounterStateReader >> counter;
+    wordCounterStateReader.close();
 
     // 2. read moby dick
-    try
-    {
-        auto start_time = std::chrono::high_resolution_clock::now();
-        std::ifstream fileReader = openFileForReading("moby_dick.txt");
-        counter.addWords(fileReader);
-        auto end_time = std::chrono::high_resolution_clock::now();
-        auto time = end_time - start_time;
-        std::cout << "read moby_dick.txt in: " << time / std::chrono::milliseconds(1) << " ms.\n";
-        fileReader.close();
-    }
-    catch (...)
+
+    auto start_time = std::chrono::high_resolution_clock::now();
+    std::ifstream fileReader("moby_dick.txt");
+    if (!fileReader.good())
     {
         std::cout << "opening moby_dick.txt for reading unsuccesssful\n";
         return 2;
     }
+    counter.addWords(fileReader);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto time = end_time - start_time;
+    std::cout << "read moby_dick.txt in: " << time / std::chrono::milliseconds(1) << " ms.\n";
+    fileReader.close();
 
     // 3. write  word_counter to file(erasing previous contents)
-    try
+    std::ofstream fileWriter("wordCounterState.txt");
+    if (!fileWriter.good())
     {
-        fileWriter = openFileForWriting("wordCounterState.txt");
-        fileWriter << counter;
-        fileWriter.close();
+        throw std::runtime_error("could not open file");
     }
-    catch (...)
-    {
-        std::cout << "opening wordCounterState.txt for writing unsuccessful\n";
-        return 2;
-    }
+
+    fileWriter << counter;
+    fileWriter.close();
 
     // 4. display statistics on cout
     std::cout << "top 10 least popular words:\n";
@@ -87,14 +57,14 @@ int main()
     std::cout << "circumambulate: " << (counter.hasWord("circumambulate") ? "yes" : "no") << '\n';
 
     // 5. iterate over word counter by frequency
-    auto start_time = std::chrono::high_resolution_clock::now();
+    start_time = std::chrono::high_resolution_clock::now();
     for (auto it = counter.freqBegin(); it != counter.freqEnd(); it++)
     {
         *it;
         // std::cout << *it << '\n';
     }
-    auto end_time = std::chrono::high_resolution_clock::now();
-    auto time = end_time - start_time;
+    end_time = std::chrono::high_resolution_clock::now();
+    time = end_time - start_time;
     std::cout << "iterated over moby dick by frequency in: " << time / std::chrono::milliseconds(1) << " ms.\n";
 
     // 5.Iterating alphabetically
